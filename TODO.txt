@@ -1,0 +1,51 @@
+SOURCE OF TRUTH WHILE SYNCING ? The server storage
+
+Iteration 1
+-----------
+Frontend:
+    Can browse
+    Can upload
+    Can rename/move
+    Can delete
+    Can edit(Definition of edit)
+
+    Can create account
+    Can login
+
+    Good to have
+    ------------
+    Preview Images, Videos, EPUB, PDF
+
+Backend:
+    Interface for client operations
+    storage backend integration with: (Better to use rclone directly ?)
+        S3/Spaces
+        Local Storage
+
+    User can create account
+    User can login
+
+    DB integration ? Activity Tracker ? Thumbnails ?
+
+Iteration 2
+----------
+Frontend:
+    Can create your own extension/app
+    calendar/password manager extension ?
+    Encryption with primary password
+
+    Good to have
+    ------------
+    Document editing 
+
+Backend:
+    Can create your own extension/app
+    Encryption with primary password (User should be able to decrypt it manually as well via script), see protonmail
+
+
+Iteration 3
+-----------
+Frontend:
+    Android client with sync facility
+
+Data Dump Func? Cronjob based backups with different storage and email on completion
