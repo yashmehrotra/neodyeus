@@ -1,11 +1,11 @@
 package fs
 
 import (
-    "bytes"
-    "os"
-    "github.com/ncw/rclone/fs/operations"
-    "github.com/ncw/rclone/cmd"
-_    "github.com/ncw/rclone/backend/s3"
+	"bytes"
+	_ "github.com/ncw/rclone/backend/s3"
+	"github.com/ncw/rclone/cmd"
+	"github.com/ncw/rclone/fs/operations"
+	"os"
 )
 
 /*
@@ -16,13 +16,12 @@ type Manager interface {
 }
 */
 
-
 func List(path []string) {
-    fsrc := cmd.NewFsSrc(path)
-    operations.List(fsrc, os.Stdout)
+	fsrc := cmd.NewFsSrc(path)
+	operations.List(fsrc, os.Stdout)
 }
 
 func main() {
-    path := []string{"spaces:dagobah"}
-    List(path)
+	path := []string{"spaces:dagobah"}
+	List(path)
 }

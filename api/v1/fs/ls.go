@@ -1,41 +1,39 @@
 package fs
 
 import (
-    //"fmt"
-    "github.com/ncw/rclone/fs/operations"
-    "github.com/ncw/rclone/cmd"
-    rcloneFS "github.com/ncw/rclone/fs"
-    "github.com/gin-gonic/gin"
+	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/ncw/rclone/cmd"
+	rcloneFS "github.com/ncw/rclone/fs"
+	"github.com/ncw/rclone/fs/walk"
 )
 
-func listrclone(path []string) Files {
+func list(fs rcloneFS.Fs, path string) FSObjects {
 
-    fileChan := make(chan rcloneFS.Object, 100)
-    Rand := func (o rcloneFS.Object) {
-        fileChan <- o
-    }
-    fsrc := cmd.NewFsSrc(path)
-    var files Files
-    go func() {
-        for f := range fileChan {
-            files = append(files, File{
-                Name: f.Remote(),
-                Size: f.Size(),
-                LastModified: f.ModTime(),
-                FullPath: f.Remote(),
-            })
-        }
-    }()
-    operations.ListFn(fsrc, Rand)
-    close(fileChan)
-    return files
+	// rclone gives error for '/'
+	path = strings.TrimSuffix(path, "/")
+
+	dt, err := walk.NewDirTree(fs, path, true, 1)
+	if err != nil {
+		panic(err)
+	}
+
+	var fsobjs FSObjects
+	for _, v := range dt {
+		for _, f := range v {
+			fsobjs = append(fsobjs, toFSObject(f))
+		}
+	}
+	return fsobjs
 }
 
 func List(c *gin.Context) {
-    path := []string{"/home/yash/rclone_test/"}
-    files := listrclone(path)
-    c.JSON(200, gin.H{
-        "status": "OK",
-        "files": files,
-    })
+	path := []string{"/home/yash/rclone_test/"}
+	fsrc := cmd.NewFsSrc(path)
+	files := list(fsrc, "/")
+	c.JSON(200, gin.H{
+		"status":     "OK",
+		"fs_objects": files,
+	})
 }

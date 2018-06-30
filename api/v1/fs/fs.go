@@ -1,17 +1,36 @@
 package fs
 
 import (
-    "time"
-    _ "github.com/ncw/rclone/backend/all"
+	_ "github.com/ncw/rclone/backend/all"
+	rcloneFS "github.com/ncw/rclone/fs"
+	"path/filepath"
+	"time"
 )
 
-type File struct {
-    Name string `json:"name"`
-    Size int64 `json:"size"`
-    LastModified time.Time `json:"last_modified"`
-    FullPath string `json:"full_path"`
+type FSObject struct {
+	Name         string    `json:"name"`
+	Size         int64     `json:"size"`
+	LastModified time.Time `json:"last_modified"`
+	FullPath     string    `json:"full_path"`
+	IsDir        bool      `json:"is_dir"`
 }
 
-type Files []File
+type FSObjects []FSObject
 
-// TODO: Write a transforming function
+// toFSObject converts rclone's
+func toFSObject(f rcloneFS.DirEntry) FSObject {
+	isDir := false
+	if f.Size() < 0 {
+		isDir = true
+	}
+	fullPath := f.Remote()
+	name := filepath.Base(fullPath)
+
+	return FSObject{
+		Name:         name,
+		Size:         f.Size(),
+		LastModified: f.ModTime(),
+		FullPath:     fullPath,
+		IsDir:        isDir,
+	}
+}
