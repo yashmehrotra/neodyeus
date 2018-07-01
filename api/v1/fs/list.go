@@ -29,9 +29,10 @@ func list(fs rcloneFS.Fs, path string) FSObjects {
 }
 
 func List(c *gin.Context) {
-	path := []string{"/home/yash/rclone_test/"}
-	fsrc := cmd.NewFsSrc(path)
-	files := list(fsrc, "/")
+	remote := []string{"/home/yash/rclone_test/"}
+	fsrc := cmd.NewFsSrc(remote)
+	path := c.DefaultQuery("path", "")
+	files := list(fsrc, path)
 	c.JSON(200, gin.H{
 		"status":     "OK",
 		"fs_objects": files,
