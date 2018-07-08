@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/ncw/rclone/cmd"
 	rcloneFS "github.com/ncw/rclone/fs"
 	"github.com/ncw/rclone/fs/operations"
 )
@@ -30,8 +29,10 @@ func remove(fs rcloneFS.Fs, path string, dryRun bool) (FSObjects, bool) {
 }
 
 func Remove(c *gin.Context) {
-	remote := []string{"/home/yash/rclone_test/"}
-	fsrc := cmd.NewFsSrc(remote)
+	fsrc, err := rcloneFS.NewFs(remote)
+	if err != nil {
+		panic(err)
+	}
 
 	var req RemoveRequest
 	c.BindJSON(&req)

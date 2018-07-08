@@ -12,5 +12,6 @@ func main() {
 	r.GET("/api/v1/list", fs.List)
 	r.PUT("/api/v1/mkdir", fs.Mkdir)
 	r.DELETE("/api/v1/remove", fs.Remove)
+	r.PUT("/api/v1/put", fs.Put)
 	r.Run()
 }

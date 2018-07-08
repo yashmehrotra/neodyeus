@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/ncw/rclone/cmd"
 	rcloneFS "github.com/ncw/rclone/fs"
 	"github.com/ncw/rclone/fs/walk"
 )
@@ -29,8 +28,11 @@ func list(fs rcloneFS.Fs, path string) FSObjects {
 }
 
 func List(c *gin.Context) {
-	remote := []string{"/home/yash/rclone_test/"}
-	fsrc := cmd.NewFsSrc(remote)
+	fsrc, err := rcloneFS.NewFs(remote)
+	if err != nil {
+		panic(err)
+	}
+
 	path := c.DefaultQuery("path", "")
 	files := list(fsrc, path)
 	c.JSON(200, gin.H{

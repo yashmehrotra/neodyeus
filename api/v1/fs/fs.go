@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+const (
+	remote = "/home/yash/rclone_test"
+)
+
 type FSObject struct {
 	Name         string    `json:"name"`
 	Size         int64     `json:"size"`
@@ -21,7 +25,6 @@ type FSObjects []FSObject
 // If the need be, this can also be used,
 // Also, replace cmd.NewFsSrc with this
 // fsWithPath := rcloneFS.NewFs(remote + ":" + path)
-
 
 // toFSObject converts rclone's
 func toFSObject(f rcloneFS.DirEntry) FSObject {

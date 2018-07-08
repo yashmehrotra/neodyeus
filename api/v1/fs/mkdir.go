@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/ncw/rclone/cmd"
 	rcloneFS "github.com/ncw/rclone/fs"
 )
 
@@ -23,8 +22,10 @@ func mkdir(fs rcloneFS.Fs, path string) bool {
 }
 
 func Mkdir(c *gin.Context) {
-	remote := []string{"/home/yash/rclone_test/"}
-	fsrc := cmd.NewFsSrc(remote)
+	fsrc, err := rcloneFS.NewFs(remote)
+	if err != nil {
+		panic(err)
+	}
 
 	var req MkdirRequest
 	c.BindJSON(&req)
