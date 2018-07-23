@@ -1,6 +1,7 @@
 package fs
 
 import (
+	humanize "github.com/dustin/go-humanize"
 	_ "github.com/ncw/rclone/backend/all"
 	rcloneFS "github.com/ncw/rclone/fs"
 	"path/filepath"
@@ -11,12 +12,19 @@ const (
 	remote = "/home/yash/rclone_test"
 )
 
+type ObjectMeta struct {
+	Thumbnail string
+	MimeType  string
+}
+
 type FSObject struct {
-	Name         string    `json:"name"`
-	Size         int64     `json:"size"`
-	LastModified time.Time `json:"last_modified"`
-	FullPath     string    `json:"full_path"`
-	IsDir        bool      `json:"is_dir"`
+	Name         string     `json:"name"`
+	Size         int64      `json:"size"`
+	HumanSize    string     `json:"human_size"`
+	LastModified time.Time  `json:"last_modified"`
+	FullPath     string     `json:"full_path"`
+	IsDir        bool       `json:"is_dir"`
+	Meta         ObjectMeta `json:"meta"`
 }
 
 type FSObjects []FSObject
@@ -35,9 +43,16 @@ func toFSObject(f rcloneFS.DirEntry) FSObject {
 	fullPath := f.Remote()
 	name := filepath.Base(fullPath)
 
+	// For directories, do not count size of the tree yet
+	humanSize := "-"
+	if !isDir {
+		humanSize = humanize.Bytes(uint64(f.Size()))
+	}
+
 	return FSObject{
 		Name:         name,
 		Size:         f.Size(),
+		HumanSize:    humanSize,
 		LastModified: f.ModTime(),
 		FullPath:     fullPath,
 		IsDir:        isDir,

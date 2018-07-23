@@ -8,7 +8,12 @@ type User struct {
 }
 
 func CreateUser(u User) error {
+	// Check if email exists in DB
+	// If not, return error
+	// else create user
+
 }
 
 func AuthUser(email, password string) bool {
+	email
 }
