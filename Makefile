@@ -1,7 +1,7 @@
 GOFILES_NOVENDOR = $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 
 run:
-	@go run main.go
+	@NEODYEUS_PATH=/tmp go run main.go
 test:
 	@go test -v ./...
 

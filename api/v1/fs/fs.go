@@ -1,15 +1,17 @@
 package fs
 
 import (
+	"os"
+	"path/filepath"
+	"time"
+
 	humanize "github.com/dustin/go-humanize"
 	_ "github.com/ncw/rclone/backend/all"
 	rcloneFS "github.com/ncw/rclone/fs"
-	"path/filepath"
-	"time"
 )
 
-const (
-	remote = "/home/yash/rclone_test"
+var (
+	remote = os.Getenv("NEODYEUS_PATH")
 )
 
 type ObjectMeta struct {
@@ -44,7 +46,7 @@ func toFSObject(f rcloneFS.DirEntry) FSObject {
 	name := filepath.Base(fullPath)
 
 	// For directories, do not count size of the tree yet
-	humanSize := "-"
+	var humanSize string
 	if !isDir {
 		humanSize = humanize.Bytes(uint64(f.Size()))
 	}
