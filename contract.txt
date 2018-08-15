@@ -1,0 +1,26 @@
+/api
+    /v1
+      /fs
+        /list?path=
+        /copy?src=&dst=
+        /move?src=&dst=     (Same for rename?)
+        /mkdir?path=
+        /upload or /put
+        /remove?src=
+
+        What about edit endpoint ? Baad main ?
+      /user
+        /create
+        /login
+        /logout
+
+
+Contracts
+---------
+list:
+    {"files": [File], "status": }
+    File:
+        name:
+        size:
+        last_modified:
+        full_path:
