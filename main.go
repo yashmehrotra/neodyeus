@@ -31,5 +31,6 @@ func main() {
 	r.DELETE("/api/v1/remove", fs.Remove)
 	r.PUT("/api/v1/put", fs.Put)
 	r.GET("/api/v1/get", fs.Get)
+	r.GET("/api/v1/preview/*path", fs.Preview)
 	r.Run()
 }
