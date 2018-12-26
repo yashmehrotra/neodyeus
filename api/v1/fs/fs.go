@@ -6,7 +6,7 @@ import (
 	"time"
 
 	humanize "github.com/dustin/go-humanize"
-	_ "github.com/ncw/rclone/backend/all"
+	_ "github.com/ncw/rclone/backend/local"
 	rcloneFS "github.com/ncw/rclone/fs"
 )
 
@@ -15,8 +15,8 @@ var (
 )
 
 type ObjectMeta struct {
-	Thumbnail string
-	MimeType  string
+	Thumbnail   string `json:"thumbnail"`
+	ContentType string `json:"content_type"`
 }
 
 type FSObject struct {
@@ -30,6 +30,19 @@ type FSObject struct {
 }
 
 type FSObjects []FSObject
+
+func extractContentType(path string) string {
+	contentTypeMap := map[string]string{
+		".jpg":  "image/jpeg",
+		".jpeg": "image/jpeg",
+		".png":  "image/png",
+	}
+
+	if val, exists := contentTypeMap[filepath.Ext(path)]; exists {
+		return val
+	}
+	return ""
+}
 
 // TODO
 // If the need be, this can also be used,
@@ -51,6 +64,11 @@ func toFSObject(f rcloneFS.DirEntry) FSObject {
 		humanSize = humanize.Bytes(uint64(f.Size()))
 	}
 
+	objMeta := ObjectMeta{
+		Thumbnail:   "",
+		ContentType: extractContentType(name),
+	}
+
 	return FSObject{
 		Name:         name,
 		Size:         f.Size(),
@@ -58,5 +76,6 @@ func toFSObject(f rcloneFS.DirEntry) FSObject {
 		LastModified: f.ModTime(),
 		FullPath:     fullPath,
 		IsDir:        isDir,
+		Meta:         objMeta,
 	}
 }

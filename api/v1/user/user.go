@@ -7,13 +7,13 @@ type User struct {
 	PasswordHash string `json:"-"`
 }
 
-func CreateUser(u User) error {
+func createUser(u User) error {
 	// Check if email exists in DB
 	// If not, return error
 	// else create user
-
+	return nil
 }
 
 func AuthUser(email, password string) bool {
-	email
+	return true
 }
