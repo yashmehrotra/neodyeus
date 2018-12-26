@@ -6,6 +6,7 @@ import (
 	"time"
 
 	humanize "github.com/dustin/go-humanize"
+	//_ "github.com/ncw/rclone/backend/all"
 	_ "github.com/ncw/rclone/backend/local"
 	rcloneFS "github.com/ncw/rclone/fs"
 )
