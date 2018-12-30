@@ -27,6 +27,11 @@ func main() {
 	r := gin.Default()
 	r.Use(CORSMiddleware())
 
+	// Health Endpoint
+	r.GET("/api/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{"health": "OK"})
+	})
+
 	// File System routes
 	r.GET("/api/v1/list", fs.List)
 	r.PUT("/api/v1/mkdir", fs.Mkdir)
