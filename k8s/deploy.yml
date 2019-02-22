@@ -22,6 +22,9 @@ spec:
       labels:
         app: neodyeus
 
+    spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
       - image: registry.gitlab.com/yashmehrotra/neodyeus:master
         name: neodyeus
