@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neodyeus
+  labels:
+    app: neodyeus
+spec:
+  selector:
+    matchLabels:
+      app: neodyeus
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 20%
+      maxUnavailable: 0%
+  minReadySeconds: 5
+  progressDeadlineSeconds: 600
+  template:
+    metadata:
+      name: neodyeus
+      labels:
+        app: neodyeus
+
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - image: registry.gitlab.com/yashmehrotra/neodyeus:master
+        name: neodyeus
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "400Mi"
+          limits:
+            cpu: "400m"
+            memory: "800Mi"
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 10
+          failureThreshold: 3
